@@ -1,9 +1,11 @@
 #!/bin/bash
 
+DOCKER_MACHINE=172.17.0.1
+
 docker run -d --name zookeeper \
     -p 2181:2181 \
     -v /tmp:/tmp \
-    --env KAFKA_HEAP_OPTS='-Xms8M -Xmx8M' \
+    --env KAFKA_HEAP_OPTS='-Xms16M -Xmx16M' \
     confluent/zookeeper
     
 docker run -d --name kafka \
@@ -11,6 +13,7 @@ docker run -d --name kafka \
     -v /tmp:/tmp \
     --env KAFKA_HEAP_OPTS='-Xms100M -Xmx100M' \
     --env KAFKA_CFG_URL='https://raw.githubusercontent.com/mhowlett/kafka-low-end-test/master/config/server.properties' \
+    --env KAFKA_ADVERTISED_HOST_NAME=$DOCKER_MACHINE \
     --link zookeeper:zookeeper \
     confluent/kafka
 
