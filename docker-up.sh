@@ -10,3 +10,8 @@ docker run -d --name kafka \
     --env KAFKA_HEAP_OPTS='-Xms100M -Xmx100M' \
     --link zookeeper:zookeeper \
     confluent/kafka
+
+docker run -d --name producer \
+    java:8u91 \
+    -v ./target:/target \
+    java -jar /target/kafka-low-end-test-1.0-SNAPSHOT-jar-with-dependencies.jar 1000
