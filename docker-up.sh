@@ -8,6 +8,7 @@ docker run -d --name zookeeper \
 docker run -d --name kafka \
     -p 9092:9092 \
     --env KAFKA_HEAP_OPTS='-Xms100M -Xmx100M' \
+    --env KAFKA_CFG_URL='https://raw.githubusercontent.com/mhowlett/kafka-low-end-test/master/config/server.properties' \
     --link zookeeper:zookeeper \
     confluent/kafka
 
