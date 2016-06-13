@@ -17,6 +17,6 @@ docker run -d --name kafka \
     confluent/kafka
 
 docker run -d --name producer \
-    -v /git/target:/target \
+    -v /git/kafka-low-end-test/target:/target \
     java:8u91 \
     java -jar /target/kafka-low-end-test-1.0-SNAPSHOT-jar-with-dependencies.jar 1000
