@@ -40,6 +40,8 @@ public class Program {
   public static void main(String[] args) {
     System.out.println("starting...");
 
+    String host = args[1];
+    
     int N = Integer.parseInt(args[0]);
     System.out.println(N);
 
@@ -47,8 +49,8 @@ public class Program {
     Logger.getRootLogger().setLevel(Level.DEBUG);
 
     Properties props = new Properties();
-    props.put("bootstrap.servers", "localhost:9092");
-    props.put("", "localhost:2181");
+    props.put("bootstrap.servers", host + ":9092");
+    props.put("", host + ":2181");
     props.put("acks", "all");
     props.put("retries", 0);
     props.put("batch.size", 16384);
