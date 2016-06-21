@@ -17,36 +17,7 @@ import org.apache.log4j.Logger;
 
 public class Program {
 
-  public static void Produce() {
-
-  }
-
-  public static void Consume() {
-    Properties props = new Properties();
-    props.put("bootstrap.servers", "localhost:9092");
-    props.put("group.id", "test");
-    props.put("enable.auto.commit", "true");
-    props.put("auto.commit.interval.ms", "1000");
-    props.put("session.timeout.ms", "30000");
-    props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-    props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-    KafkaConsumer<String, String> consumer = new KafkaConsumer<>(props);
-    consumer.subscribe(Arrays.asList("foo", "bar"));
-    while (true) {
-      ConsumerRecords<String, String> records = consumer.poll(100);
-      for (ConsumerRecord<String, String> record : records)
-        System.out.printf("offset = %d, key = %s, value = %s", record.offset(), record.key(), record.value());
-    }
-
-  }
-  public static void main(String[] args) {
-    System.out.println("starting...");
-    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
-    System.out.println(timeStamp);
-
-    int N = Integer.parseInt(args[0]);
-    System.out.println(N);
-
+  private static void produce(int N) {
     BasicConfigurator.configure();
     Logger.getRootLogger().setLevel(Level.DEBUG);
 
@@ -78,10 +49,45 @@ public class Program {
     }
 
     producer.close();
+  }
+
+  private static void consume(int N) {
+    Properties props = new Properties();
+    props.put("bootstrap.servers", "localhost:9092");
+    props.put("group.id", "test");
+    props.put("enable.auto.commit", "false");
+    props.put("session.timeout.ms", "30000");
+    props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+    props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
+    KafkaConsumer<String, String> consumer = new KafkaConsumer<>(props);
+    consumer.subscribe(Arrays.asList("my-topic"));
+    while (true) {
+      ConsumerRecords<String, String> records = consumer.poll(100);
+      for (ConsumerRecord<String, String> record : records) {
+        System.out.printf("offset = %d, key = %s, value = %s", record.offset(), record.key(), record.value());
+      }
+      consumer.commitSync();
+    }
+  }
+
+  public static void main(String[] args) {
+    System.out.println("starting...");
+
+    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
+    System.out.println(timeStamp);
+
+    if (args[0] == "p") {
+      produce(Integer.parseInt(args[1]));
+    } else if (args[0] == "c") {
+      consume(Integer.parseInt(args[1]));
+    } else {
+      System.out.println("unknown parameter 0 - expect 'c' or 'p'.");
+    }
 
     timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
     System.out.println(timeStamp);
 
     System.out.println("done...");
   }
+
 }
