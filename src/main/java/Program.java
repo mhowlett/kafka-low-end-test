@@ -18,8 +18,6 @@ import org.apache.log4j.Logger;
 public class Program {
 
   private static void produce(int N) {
-    BasicConfigurator.configure();
-    Logger.getRootLogger().setLevel(Level.DEBUG);
 
     Properties props = new Properties();
     props.put("bootstrap.servers", "localhost:9092");
@@ -52,6 +50,7 @@ public class Program {
   }
 
   private static void consume(int N) {
+
     Properties props = new Properties();
     props.put("bootstrap.servers", "localhost:9092");
     props.put("group.id", "test");
@@ -67,6 +66,7 @@ public class Program {
       for (ConsumerRecord<String, String> record : records) {
         System.out.printf("offset = %d, key = %s, value = %s", record.offset(), record.key(), record.value());
       }
+      System.out.println("here");
       // consumer.commitSync();
     }
   }
@@ -76,6 +76,9 @@ public class Program {
 
     String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
     System.out.println(timeStamp);
+
+    BasicConfigurator.configure();
+    Logger.getRootLogger().setLevel(Level.DEBUG);
 
     if (args[0].equals("p")) {
       produce(Integer.parseInt(args[1]));
