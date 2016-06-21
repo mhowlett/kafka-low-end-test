@@ -76,9 +76,9 @@ public class Program {
     String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
     System.out.println(timeStamp);
 
-    if (args[0] == "p") {
+    if (args[0].equals("p")) {
       produce(Integer.parseInt(args[1]));
-    } else if (args[0] == "c") {
+    } else if (args[0].equals("c")) {
       consume(Integer.parseInt(args[1]));
     } else {
       System.out.println("unknown parameter 0 - expect 'c' or 'p'.");
