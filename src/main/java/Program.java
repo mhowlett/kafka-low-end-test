@@ -5,7 +5,9 @@ import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Properties;
 
 import org.apache.log4j.BasicConfigurator;
@@ -39,6 +41,8 @@ public class Program {
   }
   public static void main(String[] args) {
     System.out.println("starting...");
+    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
+    System.out.println(timeStamp);
 
     int N = Integer.parseInt(args[0]);
     System.out.println(N);
@@ -74,6 +78,10 @@ public class Program {
     }
 
     producer.close();
+
+    timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
+    System.out.println(timeStamp);
+
     System.out.println("done...");
   }
 }
